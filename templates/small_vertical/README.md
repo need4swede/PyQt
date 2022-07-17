@@ -1,4 +1,4 @@
-## Small - Vertical
+# Small - Vertical
 
 DESIGN:
 - Vertically shaped window with stacked UI elements
@@ -13,10 +13,10 @@ FUNCTIONALITY:
 - Directory Browser
 
 CREDITS:
-Mike Afshari (need4swede)
-https://mafshari.work
-https://github.com/need4swede
+- Mike Afshari (need4swede)
+- https://mafshari.work
+- https://github.com/need4swede
 
-#### Preview
+### Preview
 <img src="preview.png">
 
