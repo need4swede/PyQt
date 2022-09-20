@@ -1,5 +1,7 @@
 # List Directory Contents
 
+Returns a list of files, folders or both within a given directory
+
 DESIGN:
 - Horizontially lined window with stacked UI elements
 - Always on top GUI
@@ -10,9 +12,6 @@ FUNCTIONALITY:
 - Radio Buttons
 - Child Window
 - Directory Browser
-
-PURPOSE:
-Returns a list of files, folders or both within a given directory
 
 CREDITS:
 - Mike Afshari (need4swede)
