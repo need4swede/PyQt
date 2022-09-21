@@ -1,9 +1,9 @@
 import os, webbrowser
-from n4s import fs, term
+from n4s import fs, term, strgs
 from sys import executable as python_executable, argv as python_argv, exit as python_exit
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QApplication, QStatusBar, QPlainTextEdit, QRadioButton, QMenuBar, QMenu, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QFileDialog, QVBoxLayout, QHBoxLayout, QCheckBox
-from PyQt6.QtGui import QCursor, QFont
+from PyQt6.QtWidgets import QApplication, QStatusBar, QPlainTextEdit, QRadioButton, QCheckBox, QMenuBar, QMenu, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QFileDialog, QVBoxLayout, QHBoxLayout
+from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt
 
 '''
@@ -39,11 +39,21 @@ class DirectoryContents(QWidget):
         ## WINDOW CONTENTS
         layout = QVBoxLayout()
         self.label = QPlainTextEdit()
-        self.label.setFixedSize(800, 400)
+        self.label.setFixedSize(500, 300)
+        self.label.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.label.setPlainText(text)
         self.label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+
+        ## WINDOW BUTTONS
+        self.btn_copy = QPushButton('Copy')
+        self.btn_copy.setFixedWidth(100)
+        self.btn_copy.clicked.connect(lambda: clipboard.setText(text))
+        
+        ## CREATE LAYOUT
         layout.addWidget(self.label)
+        layout.addWidget(self.btn_copy)
         self.setLayout(layout)
+        # self.setStyleSheet("QPlainTextEdit { padding-right: 50px; }")
         self.show()
 
 ## MAIN APPLICATION 
@@ -134,6 +144,7 @@ class MainWindow(QWidget):
 
         self.radio_select_dirs = QRadioButton('Folders ONLY', self)
         self.radio_select_dirs.move(120, 105)
+        self.radio_select_dirs.setFixedWidth(125)
         self.radio_select_dirs.setCursor(QCursor(Qt.CursorShape.DragCopyCursor))
         self.radio_select_dirs.setToolTip(
             "Only return a list of directories")
@@ -146,6 +157,11 @@ class MainWindow(QWidget):
             "Return a list of files and directories")
         self.radio_select_all.show()
         self.radio_select_all.setChecked(True)
+
+        self.hide_extensions = QCheckBox('Hide Extensions', self)
+        self.hide_extensions.move(15, 135)
+        self.hide_extensions.setFixedWidth(135)
+        self.hide_extensions.show()
 
         ##################################################################################### BROWSE BUTTON
         self.browse_button = QPushButton('📂 Browse')
@@ -177,7 +193,7 @@ class MainWindow(QWidget):
         ################################################################################### CREATE LAYOUT
         self.layout.addLayout(self.topSection)
         self.layout.addWidget(self.browse_button)
-        self.layout.addSpacing(25)
+        self.layout.addSpacing(55)
         self.layout.addLayout(self.middleSection)
 
     ## RUN ACTION
@@ -197,7 +213,11 @@ class MainWindow(QWidget):
         
         ## ITERATE THROUGH LIST
         for x in range(len(results)):
-            result = result + results[x] + "\n"
+            if self.hide_extensions.isChecked():
+                file_extension = fs.read_format(strgs.replace_text(results[x], '  ', ' '), Include_Period=True)
+                result = result + strgs.replace_text(results[x], ['  ', file_extension], ' ') + "\n"
+            else:
+                result = result + strgs.replace_text(results[x], '  ', ' ') + "\n"
 
         ## SHOW RESULTS
         self.new_window = DirectoryContents(str(result))
@@ -234,6 +254,7 @@ if __name__ == '__main__':
     
     ## APP
     app_version = 1.0
+    clipboard = app.clipboard()
     MainWindow = MainWindow()
     MainWindow.show()
     term.clear()
