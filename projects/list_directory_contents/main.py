@@ -25,36 +25,61 @@ https://mafshari.work
 https://github.com/need4swede
 '''
 
-## NEW WINDOW
+## DIRECTORY CONTENT
 class DirectoryContents(QWidget):
     """
     This window displays the contents of your directory
     """
-    def __init__(self, text):
+    def __init__(self, text, dir_quantity, file_quantity):
         super().__init__()
 
         ## KEEP WINDOW ON TOP
         self.setWindowFlags(QtCore.Qt.WindowType.WindowStaysOnTopHint)
 
         ## WINDOW CONTENTS
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
         self.label = QPlainTextEdit()
         self.label.setFixedSize(500, 300)
         self.label.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.label.setPlainText(text)
         self.label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
 
+        ## CALCULATE QUANTITY
+        if MainWindow.radio_select_all.isChecked():
+            total = dir_quantity + file_quantity
+            self.label_total_quantity = QLabel(f"Files: {file_quantity}                    Folders: {dir_quantity}                    Total: {total}")
+        elif MainWindow.radio_select_files.isChecked():
+            total = file_quantity
+            self.label_total_quantity = QLabel(f"Files: {file_quantity}")
+        elif MainWindow.radio_select_dirs.isChecked():
+            total = dir_quantity
+            self.label_total_quantity = QLabel(f"Folders: {dir_quantity}")
+
         ## WINDOW BUTTONS
         self.btn_copy = QPushButton('Copy')
         self.btn_copy.setFixedWidth(100)
-        self.btn_copy.clicked.connect(lambda: clipboard.setText(text))
-        
+        self.btn_copy.clicked.connect(lambda: self.copy_text(text))
+
+        ## ADD LABELS TO LAYOUT
+        self.label_layout = QVBoxLayout()
+        self.label_layout.addWidget(self.label)
+        self.label_layout.addWidget(self.label_total_quantity, alignment=QtCore.Qt.AlignmentFlag.AlignLeft)
+
+        ## ADD BUTTONS TO LAYOUT
+        self.button_layout = QVBoxLayout()
+        self.button_layout.addWidget(self.btn_copy, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
+
         ## CREATE LAYOUT
-        layout.addWidget(self.label)
-        layout.addWidget(self.btn_copy)
-        self.setLayout(layout)
-        # self.setStyleSheet("QPlainTextEdit { padding-right: 50px; }")
+        self.layout.addLayout(self.label_layout)
+        self.layout.addLayout(self.button_layout)
+
+        ## SHOW WINDOW
         self.show()
+
+    def copy_text(self, text):
+        clipboard.setText(text)
+        self.close()
 
 ## MAIN APPLICATION 
 class MainWindow(QWidget):
@@ -210,7 +235,11 @@ class MainWindow(QWidget):
             results = fs.read_dir(dir_selection, Output='files')
         elif self.radio_select_dirs.isChecked():
             results = fs.read_dir(dir_selection, Output='dirs')
-        
+
+        ## CALCULATE QUANTITIES
+        dir_quantity = fs.read_dir(dir_selection, Output='dir_count')
+        file_quantity = fs.read_dir(dir_selection, Output='file_count')
+
         ## ITERATE THROUGH LIST
         for x in range(len(results)):
             if self.hide_extensions.isChecked():
@@ -220,7 +249,7 @@ class MainWindow(QWidget):
                 result = result + strgs.replace_text(results[x], '  ', ' ') + "\n"
 
         ## SHOW RESULTS
-        self.new_window = DirectoryContents(str(result))
+        self.new_window = DirectoryContents(str(result), dir_quantity, file_quantity)
 
     ## RESET GUI
     def reset(self):
