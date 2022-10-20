@@ -2,7 +2,7 @@
 ######## IMPORTS ##############################
 from n4s import fs, web, term, strgs
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QPushButton, QPlainTextEdit,
-                                QVBoxLayout, QWidget, QProgressBar)
+                                QVBoxLayout, QWidget, QProgressBar, QLabel)
 from PyQt6.QtCore import QProcess, QThread, pyqtSignal
 import sys, time, multiprocessing, os
 ###############################################
@@ -62,7 +62,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Application Installer")
 
         ## SET HEIGHT
-        self.setFixedHeight(120)
+        self.setFixedHeight(140)
 
         ## HANDLE EXIT
         app.aboutToQuit.connect(lambda: app.quit())
@@ -117,13 +117,18 @@ class MainWindow(QMainWindow):
         ## ADD UNINSTALL BUTTON
         if self.app_installed:
             self.layout.addWidget(self.uninstall_btn)
-            self.setFixedHeight(160)
+            self.setFixedHeight(180)
         
         ## ADD PROGRESS BAR
         self.layout.addWidget(self.progress)
 
         ## ADD WINDOW TEXT PROMPTS
         self.layout.addWidget(self.text)
+
+        ## ADD DEVELOPER INFO
+        self.credit = QLabel('PyQt6 Project | by Need4Swede')
+        self.credit.setStyleSheet('font-size: 11px; font-weight: bold;')
+        self.layout.addWidget(self.credit)
 
         ## SET LAYOUT
         w = QWidget()
