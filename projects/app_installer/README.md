@@ -1,17 +1,16 @@
-# List Directory Contents
+# App Installer
 
-Returns a list of files, folders or both within a given directory
+'Installs' and application by copying an executable from one directory to another (and creates a desktop shortcut [Windows Only])
 
 DESIGN:
 - Horizontially lined window with stacked UI elements
-- Always on top GUI
 
 FUNCTIONALITY:
-- Text Input
 - Standard Buttons
-- Radio Buttons
-- Child Window
-- Directory Browser
+- Text Output
+- Progress Bar
+- Install, Update and Uninstall
+
 
 CREDITS:
 - Mike Afshari (need4swede)
