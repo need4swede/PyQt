@@ -8,8 +8,8 @@ from PyQt6.QtCore import Qt
 
 '''
 DESIGN:
-- Vertically shaped window with stacked UI elements
-- Capable of collapsing and expanding
+- Horizontally shaped window with stacked UI elements
+- Small and concise
 - Always on top GUI
 
 FUNCTIONALITY:
@@ -107,7 +107,7 @@ class TextInput(QWidget):
         self.setFixedWidth(300)
 
         ## WINDOW TITLE
-        self.setWindowTitle('Filename Manager')
+        self.setWindowTitle('Rename')
 
         ## INPUT DIR
         self.input_dir = input_dir
@@ -196,7 +196,7 @@ class MainWindow(QWidget):
         app.aboutToQuit.connect(self.quit)
 
         ################################################################################# PARENT LAYOUT
-        self.setWindowTitle('Filename Manager')
+        self.setWindowTitle('Rename')
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(15, 15, 15, 0)
         self.setFixedHeight(200)
