@@ -2,7 +2,7 @@ import os, webbrowser
 from n4s import fs, term, strgs
 from sys import executable as python_executable, argv as python_argv, exit as python_exit
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QApplication, QStatusBar, QPlainTextEdit, QRadioButton, QCheckBox, QMenuBar, QMenu, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QFileDialog, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QStatusBar, QRadioButton, QCheckBox, QMenuBar, QMenu, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox, QFileDialog, QVBoxLayout, QHBoxLayout
 from PyQt6.QtGui import QCursor, QShortcut, QKeySequence
 from PyQt6.QtCore import Qt
 
@@ -25,62 +25,6 @@ https://mafshari.work
 https://github.com/need4swede
 '''
 
-## DIRECTORY CONTENT
-class DirectoryContents(QWidget):
-    """
-    This window displays the contents of your directory
-    """
-    def __init__(self, text, dir_quantity, file_quantity):
-        super().__init__()
-
-        ## KEEP WINDOW ON TOP
-        self.setWindowFlags(QtCore.Qt.WindowType.WindowStaysOnTopHint)
-
-        ## WINDOW CONTENTS
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-        self.label = QPlainTextEdit()
-        self.label.setFixedSize(500, 300)
-        self.label.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
-        self.label.setPlainText(text)
-        self.label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-
-        ## CALCULATE QUANTITY
-        if MainWindow.radio_select_all.isChecked():
-            total = dir_quantity + file_quantity
-            self.label_total_quantity = QLabel(f"Files: {file_quantity}                    Folders: {dir_quantity}                    Total: {total}")
-        elif MainWindow.radio_add_text.isChecked():
-            total = file_quantity
-            self.label_total_quantity = QLabel(f"Files: {file_quantity}")
-        elif MainWindow.radio_remove_text.isChecked():
-            total = dir_quantity
-            self.label_total_quantity = QLabel(f"Folders: {dir_quantity}")
-
-        ## WINDOW BUTTONS
-        self.btn_copy = QPushButton('Copy')
-        self.btn_copy.setFixedWidth(100)
-        self.btn_copy.clicked.connect(lambda: self.copy_text(text))
-
-        ## ADD LABELS TO LAYOUT
-        self.label_layout = QVBoxLayout()
-        self.label_layout.addWidget(self.label)
-        self.label_layout.addWidget(self.label_total_quantity, alignment=QtCore.Qt.AlignmentFlag.AlignLeft)
-
-        ## ADD BUTTONS TO LAYOUT
-        self.button_layout = QVBoxLayout()
-        self.button_layout.addWidget(self.btn_copy, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
-
-        ## CREATE LAYOUT
-        self.layout.addLayout(self.label_layout)
-        self.layout.addLayout(self.button_layout)
-
-        ## SHOW WINDOW
-        self.show()
-
-    def copy_text(self, text):
-        clipboard.setText(text)
-        self.close()
-
 ## RUN CHANGES
 class ChangeFileName():
 
@@ -88,19 +32,69 @@ class ChangeFileName():
     def __init__(self):
         super().__init__()
 
+    ## ADD TEXT TO EACH FILE
     def add_text(file_dir, file_rename):
-        file_list = sorted(fs.read_dir(file_dir, 'files'))
-        file_count = fs.read_dir(file_dir, 'file_count')
 
-        for file in range(file_count):
-            fs.rename(f"{file_dir}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}", False)
+        ## ITERATE THROUGH NESTED DIRECTORIES
+        if MainWindow.checkbox_nested_dirs.isChecked():
 
+            ## ITERATE THROUGH DIRECTORIES WITHIN INPUT DIR
+            for i in range(MainWindow.dirs_count):
+
+                ## LIST OF FILES WITHIN DIRECTORY
+                file_list = sorted(fs.read_dir(MainWindow.dirs_list[i], 'files'))
+
+                ## COUNT OF FILES WITHIN DIRECTORY
+                file_count = fs.read_dir(MainWindow.dirs_list[i], 'file_count')
+
+                ## RENAME FILES
+                for file in range(file_count):
+                    fs.rename(f"{MainWindow.dirs_list[i]}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}", False)
+        
+        ## SINGLE DIRECTORY, ITERATE THROUGH FILES ONLY
+        else:
+
+            ## LIST OF FILES WITHIN DIRECTORY
+            file_list = sorted(fs.read_dir(file_dir, 'files'))
+
+            ## COUNT OF FILES WITHIN DIRECTORY
+            file_count = fs.read_dir(file_dir, 'file_count')
+
+            ## RENAME FILES
+            for file in range(file_count):
+                fs.rename(f"{file_dir}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}", False)
+
+    ## REMOVE TEXT FROM EACH FILE
     def remove_text(file_dir, file_rename):
-        file_list = sorted(fs.read_dir(file_dir, 'files'))
-        file_count = fs.read_dir(file_dir, 'file_count')
 
-        for file in range(file_count):
-            fs.rename(f"{file_dir}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
+        ## ITERATE THROUGH NESTED DIRECTORIES
+        if MainWindow.checkbox_nested_dirs.isChecked():
+
+            ## ITERATE THROUGH DIRECTORIES WITHIN INPUT DIR
+            for i in range(MainWindow.dirs_count):
+
+                ## LIST OF FILES WITHIN DIRECTORY
+                file_list = sorted(fs.read_dir(MainWindow.dirs_list[i], 'files'))
+
+                ## COUNT OF FILES WITHIN DIRECTORY
+                file_count = fs.read_dir(MainWindow.dirs_list[i], 'file_count')
+
+                ## RENAME FILES
+                for file in range(file_count):
+                    fs.rename(f"{MainWindow.dirs_list[i]}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
+        
+        ## SINGLE DIRECTORY, ITERATE THROUGH FILES ONLY
+        else:
+
+            ## LIST OF FILES WITHIN DIRECTORY
+            file_list = sorted(fs.read_dir(file_dir, 'files'))
+
+            ## COUNT OF FILES WITHIN DIRECTORY
+            file_count = fs.read_dir(file_dir, 'file_count')
+
+            ## RENAME FILES
+            for file in range(file_count):
+                fs.rename(f"{file_dir}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
 
 ## TEXT INPUT WINDOW
 class TextInput(QWidget):
@@ -174,6 +168,7 @@ class TextInput(QWidget):
         clipboard.setText(text_input)
         self.close()
 
+    ## ITERATE THROUGH DIRECTORIES
     def repeat(self, dir_input, text_input):
         self.new_window = TextInput(dir_input)
         self.new_window.textBox.setText(text_input)
@@ -249,7 +244,7 @@ class MainWindow(QWidget):
         ################################################################################# FETCH BUTTON
         self.button = QPushButton('Run')
         self.button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button.clicked.connect(lambda: TextInput(self.textBox.text()))
+        self.button.clicked.connect(self.run)
 
         ################################################################################## QUIT BUTTON
         self.quitBtn = QPushButton('Quit')
@@ -319,21 +314,23 @@ class MainWindow(QWidget):
     def run(self):
 
         ## INITIALIZE DIR SELECTION AND RESULT
-        dir_selection = self.textBox.text()
-        result = ''
+        input_dir = self.textBox.text()
 
-        ## APPLY USER SELECTION
-        if self.radio_add_text.isChecked():
-            results = fs.read_dir(dir_selection, Output='files')
-        elif self.radio_remove_text.isChecked():
-            results = fs.read_dir(dir_selection, Output='dirs')
+        ## SORT NAMES OF SUB DIRECTORIES WITHIN THE INPUT DIR
+        self.dirs = sorted(fs.read_dir(Source=input_dir, Output='dirs'))
 
-        ## CALCULATE QUANTITIES
-        dir_quantity = fs.read_dir(dir_selection, Output='dir_count')
-        file_quantity = fs.read_dir(dir_selection, Output='file_count')
+        ## COUNT SUB DIRECTORIES WITHIN THE INPUT DIR
+        self.dirs_count = fs.read_dir(Source=input_dir, Output='dir_count')
 
-        ## SHOW RESULTS
-        self.new_window = DirectoryContents(str(result), dir_quantity, file_quantity)
+        ## INITIALIZE SUB DIRECTORIES PATH LIST
+        self.dirs_list = []
+
+        ## ITERATE THROUGH SUB DIRECTORIES AND MAKE LIST OF FULL PATHS
+        for x in range(self.dirs_count):
+            self.dirs_list.append(f"{input_dir}/{self.dirs[x]}")
+
+        ## LOAD INPUT WINDOW FOR INPUTING TEXT
+        load_text_input = TextInput(input_dir)
 
     ## RESET GUI
     def reset(self):
