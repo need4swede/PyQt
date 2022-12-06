@@ -284,7 +284,7 @@ class MainWindow(QWidget):
 
         ################################################################################### LABELS
         self.credit = QLabel('PyQt6 Project | by Need4Swede')
-        self.credit.setStyleSheet('font-size: 11px; font-weight: bold;')
+        self.credit.setStyleSheet('font-size: 9px; font-weight: bold;')
 
         ##################################################################################### TOP SECTION
         self.topSection.addWidget(self.textBox)
@@ -292,6 +292,8 @@ class MainWindow(QWidget):
         self.topSection.addWidget(self.button)
 
         ################################################################################ METADATA SECTION
+        if not fs.system('is-mac'):
+            self.mainLabels.addSpacing(20)
         self.mainLabels.addWidget(self.credit)
         self.middleSection.addLayout(self.mainLabels)
 
