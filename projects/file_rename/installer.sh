@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "DETAILS:HIDE"
 curr_ver="1.0"
-latest_ver=$(curl -s https://www.Rename.app/get/version.txt)
+latest_ver=$(curl -s https://www.podracer.app/get/version.txt)
 arch="$(uname -m)"  # -i is only linux, -m is linux and apple
 usr="$(pwd)"
 Rename="/Applications/Rename.app"
@@ -17,7 +17,7 @@ else
     echo "ALERT:Update Available|There's a newer version of Rename available for download. Please install the latest version to ensure stability"
     sleep 7
     echo "Existing Installer..."
-    open https://www.Rename.app
+    open https://www.mafshari.work
     echo "QUITAPP"
 fi
 cd
@@ -28,8 +28,8 @@ if test -d "$Rename"; then
 fi
 echo "Detecting System Architecture..."
 if [[ "$arch" = x86_64* ]]; then
-    if [[ "$(uname -a)" = *ARM64* ]]; then
-        curl -s -L -o Rename.zip "https://drive.google.com/uc?export=download&id=1AlRpr_J0kQAhYJkAzcgPlJxowplVPEOP&confirm=t"
+    if [[ "$(uname -a)" = *ARM64* ]]; then 
+        curl -s -L -o Rename.zip "https://drive.google.com/uc?export=download&id=1z-2VDlGsw0df9hY_eLtCuBs4RUbFZLH5&confirm=t"
         echo 'Downloading Rename for Apple Silicon'
         echo "PROGRESS:10"
         echo "PROGRESS:12"
@@ -48,7 +48,7 @@ if [[ "$arch" = x86_64* ]]; then
         echo "PROGRESS:14"
         echo "PROGRESS:16"
         echo "PROGRESS:18"
-        curl -s -L -o Rename.zip "https://drive.google.com/uc?export=download&id=1u5tJ71xROLvXguMSrAO0DQmMEgLgOte5&confirm=t"
+        curl -s -L -o Rename.zip "https://drive.google.com/uc?export=download&id=18NvcaVjInsaKLTPDnJ8FGztd-cGnrwob&confirm=t"
         echo 'Downloading Rename for Intel x64'
         echo "PROGRESS:20"
         echo "PROGRESS:22"
@@ -63,7 +63,7 @@ elif [[ "$arch" = i*86 ]]; then
     echo "PROGRESS:14"
     echo "PROGRESS:16"
     echo "PROGRESS:18"
-    curl -s -L -o Rename.zip "https://drive.google.com/uc?export=download&id=1u5tJ71xROLvXguMSrAO0DQmMEgLgOte5&confirm=t"
+    curl -s -L -o Rename.zip "https://drive.google.com/uc?export=download&id=18NvcaVjInsaKLTPDnJ8FGztd-cGnrwob&confirm=t"
     echo 'Downloading Rename for Intel x86'
     echo "PROGRESS:20"
     echo "PROGRESS:22"
@@ -80,7 +80,7 @@ echo "PROGRESS:34"
 echo "PROGRESS:35"
 echo "PROGRESS:36"
 echo "PROGRESS:37"
-curl -s -L -o Rename.icns "https://drive.google.com/uc?export=download&id=1Z-ejDX10qLvs0yYRVZ95JY2i212hsYci"
+curl -s -L -o Rename.icns "https://drive.google.com/uc?export=download&id=1kDTeC6IESOFPW83NcKzpLn2n-vB-yO86"
 echo "PROGRESS:38"
 sleep 1
 echo "PROGRESS:39"
