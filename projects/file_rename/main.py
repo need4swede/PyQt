@@ -50,10 +50,7 @@ class ChangeFileName():
 
                 ## RENAME FILES
                 for file in range(file_count):
-                    if fs.system('is-mac'):
-                        fs.rename(f"{MainWindow.dirs_list[i]}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}")
-                    else:
-                        fs.rename(f"{MainWindow.dirs_list[i]}\{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}")
+                    fs.rename(f"{MainWindow.dirs_list[i]}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}")
         
         ## SINGLE DIRECTORY, ITERATE THROUGH FILES ONLY
         else:
@@ -66,10 +63,7 @@ class ChangeFileName():
 
             ## RENAME FILES
             for file in range(file_count):
-                if fs.system('is-mac'):
-                    fs.rename(f"{file_dir}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}")
-                else:
-                    fs.rename(f"{file_dir}\{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}")
+                fs.rename(f"{file_dir}/{file_list[file]}", f"{fs.read_format(file_list[file], True, Read_Filename=True)}{file_rename}")
 
     ## REMOVE TEXT FROM EACH FILE
     def remove_text(file_dir, file_rename):
@@ -88,10 +82,7 @@ class ChangeFileName():
 
                 ## RENAME FILES
                 for file in range(file_count):
-                    if fs.system('is-mac'):
-                        fs.rename(f"{MainWindow.dirs_list[i]}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
-                    else:
-                        fs.rename(f"{MainWindow.dirs_list[i]}\{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
+                    fs.rename(f"{MainWindow.dirs_list[i]}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
         
         ## SINGLE DIRECTORY, ITERATE THROUGH FILES ONLY
         else:
@@ -104,10 +95,7 @@ class ChangeFileName():
 
             ## RENAME FILES
             for file in range(file_count):
-                if fs.system('is-mac'):
-                    fs.rename(f"{file_dir}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
-                else:
-                    fs.rename(f"{file_dir}\{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
+                fs.rename(f"{file_dir}/{file_list[file]}", strgs.filter_text(file_list[file], [file_rename]))
 
 ## TEXT INPUT WINDOW
 class TextInput(QWidget):
@@ -304,8 +292,6 @@ class MainWindow(QWidget):
         self.topSection.addWidget(self.button)
 
         ################################################################################ METADATA SECTION
-        if not fs.system('is-mac'):
-            self.mainLabels.addSpacing(20)
         self.mainLabels.addWidget(self.credit)
         self.middleSection.addLayout(self.mainLabels)
 
@@ -342,10 +328,7 @@ class MainWindow(QWidget):
 
         ## ITERATE THROUGH SUB DIRECTORIES AND MAKE LIST OF FULL PATHS
         for x in range(self.dirs_count):
-            if fs.system('is-mac'):
-                self.dirs_list.append(f"{input_dir}/{self.dirs[x]}")
-            else:
-                self.dirs_list.append(f"{input_dir}\{self.dirs[x]}")
+            self.dirs_list.append(f"{input_dir}/{self.dirs[x]}")
 
         ## LOAD INPUT WINDOW FOR INPUTING TEXT
         load_text_input = TextInput(input_dir)
