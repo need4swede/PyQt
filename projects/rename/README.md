@@ -1,4 +1,4 @@
-# App Installer
+# Rename
 
 Add / Remove text from all filenames within a directory, or within a set of nested directories
 
