@@ -4,9 +4,9 @@ Aeries2Google is a PyQt-based GUI application that processes student report expo
 
 ## Features
 
-- GUI-based drag and drop functionality for easy file handling
-- Processes Aeries student report exports
-- Generates CSV files suitable for bulk uploads to Google Workspace or Google Classroom
+- GUI-based with drag and drop functionality for easy file handling
+- Creates student emails using a `first_name@domain` format
+- Neatly organizes CSV outputs with timestamps
 - Customizable themes
 - Built-in file browser
 
